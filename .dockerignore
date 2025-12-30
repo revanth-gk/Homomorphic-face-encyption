@@ -1,73 +1,91 @@
-# Python
+# --------------------
+# Version control
+# --------------------
+.git/
+.gitignore
+.gitattributes
+
+# --------------------
+# Dev / CI tools
+# --------------------
+.pre-commit-config.yaml
+.agent/
+
+# --------------------
+# Docs (safe to exclude)
+# --------------------
+*.md
+CHANGELOG*
+README*
+
+# --------------------
+# Python cache & build
+# --------------------
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
 .Python
-env/
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+
+# --------------------
+# Virtual envs
+# --------------------
 venv/
-ENV/
-.venv
+.env/
+.venv/
 
-# Poetry
-.venv
-poetry.lock
-
-# Pytest
-.pytest_cache/
-.coverage
-htmlcov/
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Project specific
+# --------------------
+# Tests & benchmarks
+# --------------------
+tests/
 test_images/
-*.png
-*.jpg
-*.jpeg
-*.mp4
-*.avi
+benchmarks/
+*_test.py
+camera_test.py
+ckks_test.py
+embedding_test.py
+quick_test.py
+simple_test.py
+validation_test.py
+test_multikey_privacy.py
+gpu_benchmark.py
 
-# Models and weights (can be huge!)
-*.pth
-*.pt
-*.h5
-*.ckpt
-models/
-weights/
-
-# Logs
+# --------------------
+# Logs & outputs
+# --------------------
+app_logs*
 *.log
-logs/
+benchmark_*.csv
+benchmark_*.png
+benchmark_report.json
+accuracy_vs_encryption_roc.png
 
-# Database
-*.db
-*.sqlite
+# --------------------
+# Frontend (separate service)
+# --------------------
+frontend/
 
-# Keys
+# --------------------
+# Infra not used in backend container
+# --------------------
+nginx/
+fluentd/
+
+# --------------------
+# Secrets (never ship)
+# --------------------
+secrets/
 *.key
 *.pem
-private_key.bin
-public_key.bin
-eval_key.bin
+*.crt
 
-# Node modules (if any JS testing)
-node_modules/
-frontend/node_modules/
-
-# Build artifacts
-dist/
-build/
-*.egg-info/
-
-# Docker
+# --------------------
+# Docker / Railway noise
+# --------------------
+docker-compose*.yml
 .dockerignore
+.railwayignore
