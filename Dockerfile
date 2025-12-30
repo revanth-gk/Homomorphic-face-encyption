@@ -2,29 +2,30 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install minimal system dependencies (no cmake - not building C++)
+# Minimal system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    libgomp1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender1 \
+    libgl1 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY requirements.txt ./
-
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements .
+RUN pip install --no-cache-dir -r requirements
 
-# Copy source code
+# Copy application code
 COPY src/ ./src/
+COPY simple_server.py .
 
-# Create non-root user
-RUN useradd --create-home --shell /bin/bash app \
-    && chown -R app:app /app
-USER app
+ENV PYTHONPATH=/app/src \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
+# Railway assigns PORT dynamically
 EXPOSE 5000
 
-ENV FLASK_APP=homomorphic_face_encryption.app
-ENV PYTHONPATH=/app/src
-
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["sh", "-c", "python simple_server.py"]
