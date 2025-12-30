@@ -10,12 +10,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxext6 \
     libxrender1 \
     libgl1 \
+    libpq5 \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY requirements .
-RUN pip install --no-cache-dir -r requirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY src/ ./src/
@@ -28,4 +29,5 @@ ENV PYTHONPATH=/app/src \
 # Railway assigns PORT dynamically
 EXPOSE 5000
 
-CMD ["sh", "-c", "python simple_server.py"]
+# Use gunicorn for production with Railway's PORT variable
+CMD ["sh", "-c", "python -m gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 2 --timeout 120 'homomorphic_face_encryption.app:create_app()'"]
